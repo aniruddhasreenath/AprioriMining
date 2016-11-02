@@ -13,6 +13,11 @@ public class Reorganise {
     public static ArrayList<String> topic_four;
     public static ArrayList<String> topic_five;
 
+   public static BufferedWriter file1;
+   public static BufferedWriter file2;
+   public static BufferedWriter file3;
+   public static BufferedWriter file4;
+   public static BufferedWriter file5;
 
     public static void setUpReorganiser() throws IOException{
 
@@ -23,9 +28,13 @@ public class Reorganise {
         topic_four = new ArrayList<String>();
         topic_five = new ArrayList<String>();
 
-        readAssignments();
-        //organise();
+        file1 = new BufferedWriter(new FileWriter("topic-0.txt"));
+        file2 = new BufferedWriter(new FileWriter("topic-1.txt"));
+        file3 = new BufferedWriter(new FileWriter("topic-2.txt"));
+        file4 = new BufferedWriter(new FileWriter("topic-3.txt"));
+        file5 = new BufferedWriter(new FileWriter("topic-4.txt"));
 
+        readAssignments();
     }
 
     public static void readAssignments() throws IOException{
@@ -33,26 +42,20 @@ public class Reorganise {
         try {
             String line = reader.readLine();
             String[] tmp;
-            String title = "";
-            int loop = 0;
 
             while(line != null){
 
                 tmp = line.split("\\s");
                 //remove the count of terms at the start of the string
                 for (int i = 1; i < tmp.length; i++){
-                    //words.add(tmp[i]);
                     //call organise here
-
                     organise(tmp[i]);
                 }
                 line = reader.readLine();
                 printTopics();
                 resetLists();
-                loop++;
-                if(loop==3)
-                break;
             }
+            closeFiles();
 
         } finally {
             reader.close();
@@ -63,40 +66,29 @@ public class Reorganise {
     public static void organise(String wrd) throws IOException{
 
         String[] tmp;
-            System.out.println("Word being classified: " + wrd);
+           // System.out.println("Word being classified: " + wrd);
             tmp = wrd.split(":");
             if(tmp[1].equals("00")){
                 topic_one.add(tmp[0]);
-                System.out.print(" Inserted this word into first topic " + wrd + " actally inserted word: " + tmp[0]);
-
+                //System.out.print(" Inserted this word into first topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("01")){
                 topic_two.add(tmp[0]);
-                System.out.print(" Inserted this word into second topic " + wrd + " actally inserted word: " + tmp[0]);
-
+                //System.out.print(" Inserted this word into second topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("02")){
                 topic_three.add(tmp[0]);
-                System.out.print(" Inserted this word into third  topic " + wrd + " actally inserted word: " + tmp[0]);
-
+                //System.out.print(" Inserted this word into third  topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("03")){
                 topic_four.add(tmp[0]);
-                System.out.print(" Inserted this word into 4th topic " + wrd + " actally inserted word: " + tmp[0]);
-
+                //System.out.print(" Inserted this word into 4th topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("04")){
                 topic_five.add(tmp[0]);
-                System.out.print(" Inserted this word into 5th topic " + wrd + " actally inserted word: " + tmp[0]);
+                //System.out.print(" Inserted this word into 5th topic " + wrd + " actally inserted word: " + tmp[0]);
 
             }
-            System.out.println();
-            System.out.println("===========");
-        System.out.println("1: " + topic_one.size());
-        System.out.println("2: " + topic_two.size());
-        System.out.println("3: " + topic_three.size());
-        System.out.println("4: " + topic_four.size());
-        System.out.println("5: " + topic_five.size());
 
     }
 
@@ -109,52 +101,75 @@ public class Reorganise {
     }
 
     public static void printTopics() throws IOException{
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("topic-0.txt"), "utf-8"))) {
-            for(String tmp : topic_one){
-                writer.write(tmp + " ");
-            }
-            writer.write("\n");
 
-        }
-
-        try (Writer writer1 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("topic-1.txt"), "utf-8"))) {
-            for(String tmp : topic_two){
-                writer1.write(tmp + " ");
-            }
-            writer1.write("\n");
-
-        }
-
-        try (Writer writer2 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("topic-2.txt"), "utf-8"))) {
-            for(String tmp : topic_three){
-                writer2.write(tmp + " ");
-            }
-
-            writer2.write("\n");
-        }
-
-        try (Writer writer3 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("topic-3.txt"), "utf-8"))) {
-            if (!topic_four.isEmpty()){
-                for(String tmp : topic_four){
-                    writer3.write(tmp+ " ");
+        if (!topic_one.isEmpty()){
+            for (int i = 0; i<topic_one.size(); i++){
+                if(i==0) {
+                    file1.write(topic_one.get(i));
                 }
-                writer3.write("\n");
-            }
-
-        }
-
-        try (Writer writer4 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("topic-4.txt"), "utf-8"))) {
-            if (!topic_five.isEmpty()){
-                for(String tmp : topic_five){
-                    writer4.write(tmp);
+                else{
+                    file1.write(" "+topic_one.get(i));
                 }
-                writer4.write("\n");
+
             }
+            file1.write("\n");
         }
+
+        if (!topic_two.isEmpty()){
+            for (int i = 0; i<topic_two.size(); i++){
+                if(i==0){
+                    file2.write(topic_two.get(i));
+                }
+                else{
+                    file2.write(" "+topic_two.get(i));
+                }
+
+            }
+            file2.write("\n");
+        }
+
+        if (!topic_three.isEmpty()){
+            for (int i = 0; i<topic_three.size(); i++){
+                if(i==0){
+                    file3.write(topic_three.get(i));
+                }
+                else{
+                    file3.write(" "+topic_three.get(i));
+                }
+            }
+            file3.write("\n");
+        }
+
+        if (!topic_four.isEmpty()){
+            for (int i = 0; i<topic_four.size(); i++){
+                if(i==0){
+                    file4.write(topic_four.get(i));
+                }
+                else{
+                    file4.write(" "+topic_four.get(i));
+                }
+            }
+            file4.write("\n");
+        }
+
+        if (!topic_five.isEmpty()){
+            for (int i = 0; i<topic_five.size(); i++){
+                if(i==0){
+                    file5.write(topic_five.get(i));
+                }
+                else{
+                    file5.write(" "+topic_five.get(i));
+                }
+            }
+            file5.write("\n");
+        }
+    }
+
+    public static void closeFiles() throws IOException{
+        file1.close();
+        file2.close();
+        file3.close();
+        file4.close();
+        file5.close();
     }
 }

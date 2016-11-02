@@ -15,8 +15,6 @@ public class Driver {
 
         //step 3
         Reorganise.setUpReorganiser();
-        //Reorganise.printTopics();
-
     }
 
     public static void preprocess() throws IOException{
