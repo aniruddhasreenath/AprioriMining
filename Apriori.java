@@ -153,6 +153,7 @@ public class Apriori {
             kVal++;
         }
 
+        printer.close();
 
 
     }

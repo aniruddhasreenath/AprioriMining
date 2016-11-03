@@ -17,7 +17,7 @@ public class Driver {
         //Reorganise.setUpReorganiser();
 
         //step 4
-        runApriori();
+        //runApriori();
     }
 
     public static void preprocess() throws IOException{
