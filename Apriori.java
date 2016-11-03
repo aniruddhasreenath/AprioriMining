@@ -94,15 +94,16 @@ public class Apriori {
 
         calculateFrequent();
         removeItemsBelowMinSupport();
+       // printPatterns();
 
         //second iteration this is where k = 1 meaning that the size of the pattern is 1
         createOtherCandidateLists(1);
         calculateFrequent();
-        removeItemsBelowMinSupport();
+        //removeItemsBelowMinSupport();
          printPatterns();
 
-        createOtherCandidateLists(2);
-        calculateFrequent();
+        //createOtherCandidateLists(2);
+        //calculateFrequent();
         //removeItemsBelowMinSupport();
        // printPatterns();
 
@@ -132,11 +133,10 @@ public class Apriori {
             //loop through the list of patterns
             for(int i = 0; i < items.size(); i ++){
                 String word = items.get(i).pattern[0];
-
+                wordCombo.add(word);
 
                 //for every pattern loop thorugh all the other patterns to create combos
                 for (int j = i +1; j < items.size(); j++){
-                        wordCombo.add(word);
                         String word2 = items.get(j).pattern[0];
                         wordCombo.add(word2);
 
@@ -149,11 +149,13 @@ public class Apriori {
                         newPat.add(pattern);
 
                         //clear wordscombo
-                        wordCombo.clear();
+                        wordCombo.remove(1);
                 }
+                wordCombo.clear();
             }
 
             items = newPat;
+            removeDuplicatesInCandidateList();
         }
 
         else{
@@ -185,13 +187,13 @@ public class Apriori {
                         //add all the values to the new candidate
                         for (int n = 0; n < k; n ++){
                                 newCandidate.add(items.get(i).pattern[n]);
-                            System.out.print(" " + items.get(i).pattern[n]);
+                           // System.out.print(" " + items.get(i).pattern[n]);
 
                         }
                         newCandidate.add(items.get(j).pattern[k-1]);
                         //System.out.print(" "+newCandidate.get(newCandidate.size() -1));
 
-                        System.out.println();
+                        //System.out.println();
                         //convert pattern into an array
                         String[] arr = new String[newCandidate.size()];
                         arr = newCandidate.toArray(arr);
@@ -208,6 +210,7 @@ public class Apriori {
                 }
             }
             items = newPat;
+            removeDuplicatesInCandidateList();
         }
 
 
@@ -245,6 +248,7 @@ public class Apriori {
 
                 //loop over the entier list of candidates and find out if there is a match
                 for(int i = 0; i < items.size(); i++){
+
                     // this will store the patterns in the candidate list
                     String[] elementsToMatch;
                     elementsToMatch = items.get(i).pattern;
@@ -253,16 +257,32 @@ public class Apriori {
                     for(int j = 0; j < elementsToMatch.length; j++){
                         //System.out.println(elementsToMatch[j]);
                         if(data.contains(elementsToMatch[j])){
+
                             match = true;
                         }
                         else{
+                            //System.out.println("Data line: " + data + "  MISS matching: " + elementsToMatch[j]);
                             match = false;
                             break;
                         }
                     }
+
                     // if the pattern was found after the comparison of the entire patter then increment the count
-                    if(match)
-                    items.get(i).count++;
+                   // System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+                    if(match){
+                        if (elementsToMatch.length > 1){
+                            for (int v = 0; v < elementsToMatch.length; v++){
+                                //System.out.print(" Data line: " + data + " matching ITEM : " + elementsToMatch[v] );
+                            }
+                           // System.out.println();
+                        }
+                       // System.out.println("==================================================");
+
+                        items.get(i).count++;
+                    }
+
+
+
             }
         }
 
