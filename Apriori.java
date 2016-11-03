@@ -99,7 +99,13 @@ public class Apriori {
         createOtherCandidateLists(1);
         calculateFrequent();
         removeItemsBelowMinSupport();
-        printPatterns();
+         printPatterns();
+
+        createOtherCandidateLists(2);
+        calculateFrequent();
+        //removeItemsBelowMinSupport();
+       // printPatterns();
+
 
     }
 
@@ -151,10 +157,57 @@ public class Apriori {
         }
 
         else{
+
             for(int i = 0; i < items.size(); i ++){
-                for(int j = k; j < k-1; j++){
+                ArrayList<String> patternToMatch = new ArrayList<String>();
+                ArrayList<String> newCandidate = new ArrayList<String>();
+                //pick the k-1th pattern in the current patterns
+                for(int l = 0; l < k-1; l ++){
+                    patternToMatch.add(items.get(i).pattern[l]);
+                }
+
+                //check that the same patterns exist in all the other patterns in list
+                for(int j = i+1; j < items.size(); j++){
+
+                    boolean comp = false;
+                    for(int m = 0; m < k-1; m ++){
+                        if(patternToMatch.get(m).equals(items.get(j).pattern[m])){
+                            //System.out.println("Matching: " + patternToMatch.get(m) + "with: " + items.get(j).pattern[m]);
+                            comp = true;
+                        }
+                        else{
+                            comp = false;
+                        }
+                    }
+                    //found a matching pattern
+                    if(comp){
+
+                        //add all the values to the new candidate
+                        for (int n = 0; n < k; n ++){
+                                newCandidate.add(items.get(i).pattern[n]);
+                            System.out.print(" " + items.get(i).pattern[n]);
+
+                        }
+                        newCandidate.add(items.get(j).pattern[k-1]);
+                        //System.out.print(" "+newCandidate.get(newCandidate.size() -1));
+
+                        System.out.println();
+                        //convert pattern into an array
+                        String[] arr = new String[newCandidate.size()];
+                        arr = newCandidate.toArray(arr);
+
+                        //add this array to the new item and set count to 0
+                        Item pattern = new Item(arr, 0);
+                        newPat.add(pattern);
+
+                       // System.out.println(newCandidate.size());
+
+                        //clear wordscombo
+                        newCandidate.clear();
+                    }
                 }
             }
+            items = newPat;
         }
 
 
