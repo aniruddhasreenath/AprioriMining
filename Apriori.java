@@ -13,6 +13,9 @@ public class Apriori {
 
     public ArrayList<String> words;
 
+    //used for printing purposes
+    public static BufferedWriter printer;
+
     public String nameOfTransactionFile;
 
     public int numDifItems;
@@ -24,6 +27,7 @@ public class Apriori {
     public Apriori(String file, double min) throws IOException{
 
         items = new ArrayList<Item>();
+        printer = new BufferedWriter(new FileWriter(generateFileName(file)));
         nameOfTransactionFile = file;
         numDifItems = 0;
         totalTransactions = 0;
@@ -35,6 +39,26 @@ public class Apriori {
         printValues();
         mine();
 
+    }
+
+    public String generateFileName(String f){
+        if(f.contains("0")){
+            return "pattern-0.txt";
+        }
+        else if(f.contains("1")){
+            return "pattern-1.txt";
+        }
+        else if(f.contains("2")){
+            return "pattern-2.txt";
+        }
+        else if(f.contains("3")){
+            return "pattern-3.txt";
+        }
+        else if(f.contains("4")){
+            return "pattern-4.txt";
+        }
+
+        return "pattern-def.txt";
     }
 
     public void calculateNumItems() throws IOException{
@@ -76,7 +100,7 @@ public class Apriori {
     public void printPatterns(){
         for (int i = 0; i < items.size(); i ++){
 
-            System.out.print("PATTERN TO MATCH: ");
+            System.out.print("FREQUENT PATTERN LIST: ");
             for (int j = 0; j < items.get(i).pattern.length; j++){
                 System.out.print(" "+items.get(i).pattern[j]);
             }
@@ -84,28 +108,51 @@ public class Apriori {
             System.out.println();
         }
 
-        System.out.println("MATCHED PATTERNS: " + items.size() + " Total Transactions: " + totalTransactions);
+        System.out.println("NUMBER OF FREQUENT PATTERNS: " + items.size() + " TOTAL TRANSACTIONS: " + totalTransactions);
+    }
+
+    public void printToFile() throws IOException{
+        for (int i = 0; i < items.size(); i ++){
+
+            printer.write(min_sup + " ");
+            System.out.print(min_sup +" ");
+            for (int j = 0; j < items.get(i).pattern.length; j++){
+                if (j ==0){
+                    System.out.print(items.get(i).pattern[j]);
+                    printer.write(items.get(i).pattern[j]);
+                }
+                else{
+                    System.out.print(" "+items.get(i).pattern[j]);
+                    printer.write(" "+items.get(i).pattern[j]);
+                }
+
+            }
+            printer.newLine();
+            System.out.println();
+
+        }
     }
 
     public void mine() throws IOException{
 
+        int kVal = 1;
+
         //create the first itemset with all the items
         createFirstList();
-
         calculateFrequent();
         removeItemsBelowMinSupport();
-       // printPatterns();
+        //printPatterns();
+        printToFile();
 
-        //second iteration this is where k = 1 meaning that the size of the pattern is 1
-        createOtherCandidateLists(1);
-        calculateFrequent();
-        //removeItemsBelowMinSupport();
-         printPatterns();
+        while (items.size()>0){
+            createOtherCandidateLists(kVal);
+            calculateFrequent();
+            removeItemsBelowMinSupport();
+            //printPatterns();
+            printToFile();
+            kVal++;
+        }
 
-        //createOtherCandidateLists(2);
-        //calculateFrequent();
-        //removeItemsBelowMinSupport();
-       // printPatterns();
 
 
     }
@@ -137,6 +184,9 @@ public class Apriori {
 
                 //for every pattern loop thorugh all the other patterns to create combos
                 for (int j = i +1; j < items.size(); j++){
+
+                    if(!items.get(j).pattern[0].equals(items.get(i).pattern[0])){
+
                         String word2 = items.get(j).pattern[0];
                         wordCombo.add(word2);
 
@@ -150,6 +200,8 @@ public class Apriori {
 
                         //clear wordscombo
                         wordCombo.remove(1);
+                    }
+
                 }
                 wordCombo.clear();
             }

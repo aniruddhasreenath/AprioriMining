@@ -17,7 +17,7 @@ public class Driver {
         //Reorganise.setUpReorganiser();
 
         //step 4
-        Apriori test = new Apriori("src/topic-0.txt",0.01);
+        runApriori();
     }
 
     public static void preprocess() throws IOException{
@@ -27,6 +27,23 @@ public class Driver {
         //create title file
         Token.setUpTokens(Dictionary.titles);
         Token.printTokens();
+    }
+
+    public static void runApriori() throws IOException{
+        System.out.println("RUNNING MINING ALGORITHM ON FILE topic-0");
+        Apriori ap1 = new Apriori("src/topic-0.txt",0.01);
+
+        System.out.println("RUNNING MINING ALGORITHM ON FILE topic-1");
+        Apriori ap2 = new Apriori("src/topic-1.txt",0.01);
+
+        System.out.println("RUNNING MINING ALGORITHM ON FILE topic-2");
+        Apriori ap3 = new Apriori("src/topic-2.txt",0.01);
+
+        System.out.println("RUNNING MINING ALGORITHM ON FILE topic-3");
+        Apriori ap4 = new Apriori("src/topic-3.txt",0.01);
+
+        System.out.println("RUNNING MINING ALGORITHM ON FILE topic-4");
+        Apriori ap5 = new Apriori("src/topic-4.txt",0.01);
     }
 
 }
