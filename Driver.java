@@ -17,7 +17,7 @@ public class Driver {
         //Reorganise.setUpReorganiser();
 
         //step 4
-        Apriori test = new Apriori("src/topic-0.txt",0.05);
+        Apriori test = new Apriori("src/topic-0.txt",0.01);
     }
 
     public static void preprocess() throws IOException{

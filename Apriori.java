@@ -19,7 +19,7 @@ public class Apriori {
 
     public int totalTransactions;
 
-    public double min_sup;
+    public int min_sup;
 
     public Apriori(String file, double min) throws IOException{
 
@@ -27,12 +27,14 @@ public class Apriori {
         nameOfTransactionFile = file;
         numDifItems = 0;
         totalTransactions = 0;
-        min_sup = min;
         words = new ArrayList<String>();
-
         calculateNumItems();
+        Double tmp;
+        tmp = min * totalTransactions;
+        min_sup = tmp.intValue();
+        printValues();
         mine();
-        //printValues();
+
     }
 
     public void calculateNumItems() throws IOException{
@@ -54,8 +56,8 @@ public class Apriori {
 
     public void printValues(){
 
-        /*for (int i = 0 ; i < words.size(); i++){
-            System.out.println("ADDED WORDS: "+words.get(i));
+        for (int i = 0 ; i < words.size(); i++){
+          //  System.out.println("ADDED WORDS: "+words.get(i));
         }
 
         for (int i = 0 ; i < items.size(); i++){
@@ -66,7 +68,7 @@ public class Apriori {
         System.out.println("Currently Processing File: " + nameOfTransactionFile);
         System.out.println("Number of items in File: " + numDifItems);
         System.out.println("Total Transactions: " + totalTransactions);
-        System.out.println("min sup: " + min_sup);*/
+        System.out.println("min sup: " + min_sup);
 
 
     }
@@ -76,13 +78,13 @@ public class Apriori {
 
             System.out.print("PATTERN TO MATCH: ");
             for (int j = 0; j < items.get(i).pattern.length; j++){
-                System.out.print(items.get(i).pattern[j]);
+                System.out.print(" "+items.get(i).pattern[j]);
             }
             System.out.print(" COUNT: " + items.get(i).count);
             System.out.println();
         }
 
-        System.out.println("MATCHED PATTERNS: " + items.size() + " Total patterns: " + numDifItems +" first word"+ words.get(0));
+        System.out.println("MATCHED PATTERNS: " + items.size() + " Total Transactions: " + totalTransactions);
     }
 
     public void mine() throws IOException{
@@ -90,11 +92,14 @@ public class Apriori {
         //create the first itemset with all the items
         createFirstList();
 
-        int numberOfItemsInSet = 1;
-        int frequentItemsSets = 0;
         calculateFrequent();
         removeItemsBelowMinSupport();
-        //printPatterns();
+
+        //second iteration this is where k = 1 meaning that the size of the pattern is 1
+        createOtherCandidateLists(1);
+        calculateFrequent();
+        removeItemsBelowMinSupport();
+        printPatterns();
 
     }
 
@@ -112,11 +117,62 @@ public class Apriori {
         removeDuplicatesInCandidateList();
     }
 
-    public void createOtherCandidateLists(){
+    public void createOtherCandidateLists(int k){
+
+        ArrayList<Item> newPat = new ArrayList<Item>();
+        ArrayList<String> wordCombo = new ArrayList<String>();
+
+        if (k == 1){
+            //loop through the list of patterns
+            for(int i = 0; i < items.size(); i ++){
+                String word = items.get(i).pattern[0];
+
+
+                //for every pattern loop thorugh all the other patterns to create combos
+                for (int j = i +1; j < items.size(); j++){
+                        wordCombo.add(word);
+                        String word2 = items.get(j).pattern[0];
+                        wordCombo.add(word2);
+
+                        //conver pattern into an array
+                        String[] arr = new String[wordCombo.size()];
+                        arr = wordCombo.toArray(arr);
+
+                        //add this array to the new item and set count to 0
+                        Item pattern = new Item(arr, 0);
+                        newPat.add(pattern);
+
+                        //clear wordscombo
+                        wordCombo.clear();
+                }
+            }
+
+            items = newPat;
+        }
+
+        else{
+            for(int i = 0; i < items.size(); i ++){
+                for(int j = k; j < k-1; j++){
+                }
+            }
+        }
+
 
     }
     public void removeItemsBelowMinSupport(){
-        
+
+        ArrayList<Item> tmp = new ArrayList<Item>();
+
+            for(int i = 0; i < items.size(); i++){
+                if(items.get(i).count < min_sup){
+                    //System.out.println("Removed: " + items.get(i).pattern[0] + " with count: " + items.get(i).count);
+                }
+                else{
+                    tmp.add(items.get(i));
+                }
+            }
+
+            items = tmp;
     }
 
     public void calculateFrequent() throws IOException{
