@@ -20,7 +20,10 @@ public class Driver {
         //runApriori();
 
         //step 5
-        findMaxAndClosedPatterns();
+        //findMaxAndClosedPatterns();
+
+        //step 6
+        Purity test = new Purity("pattern-0.txt");
 
     }
 
