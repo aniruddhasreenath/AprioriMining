@@ -13,6 +13,8 @@ public class Apriori {
 
     public ArrayList<String> words;
 
+    public ArrayList<Item> frequentItemsList;
+
     //used for printing purposes
     public static BufferedWriter printer;
 
@@ -27,6 +29,7 @@ public class Apriori {
     public Apriori(String file, double min) throws IOException{
 
         items = new ArrayList<Item>();
+        frequentItemsList = new ArrayList<Item>();
         printer = new BufferedWriter(new FileWriter(generateFileName(file)));
         nameOfTransactionFile = file;
         numDifItems = 0;
@@ -112,10 +115,13 @@ public class Apriori {
     }
 
     public void printToFile() throws IOException{
+        //sort in the correct order before printing
+
+        setupFormat();
         for (int i = 0; i < items.size(); i ++){
 
-            printer.write(min_sup + " ");
-            System.out.print(min_sup +" ");
+            printer.write(items.get(i).count + " ");
+            System.out.print(items.get(i).count +" ");
             for (int j = 0; j < items.get(i).pattern.length; j++){
                 if (j ==0){
                     System.out.print(items.get(i).pattern[j]);
@@ -133,6 +139,27 @@ public class Apriori {
         }
     }
 
+    public void setupFormat(){
+
+        Item[] sortpats =  new Item[frequentItemsList.size()];
+        sortpats = frequentItemsList.toArray(sortpats);
+        Arrays.sort(sortpats);
+        ArrayList<Item> sortedListOfPatterns = new ArrayList<Item>(Arrays.asList(sortpats));
+        frequentItemsList = sortedListOfPatterns;
+
+        items = frequentItemsList;
+        //removeDuplicatesInCandidateList();
+
+    }
+
+    public void addToFreqList(){
+        removeDuplicatesInCandidateList();
+        for(int i = 0; i < items.size(); i++){
+            frequentItemsList.add(items.get(i));
+        }
+    }
+
+
     public void mine() throws IOException{
 
         int kVal = 1;
@@ -141,18 +168,18 @@ public class Apriori {
         createFirstList();
         calculateFrequent();
         removeItemsBelowMinSupport();
-        //printPatterns();
-        printToFile();
+        addToFreqList();
+        //printToFile();
 
         while (items.size()>0){
             createOtherCandidateLists(kVal);
             calculateFrequent();
             removeItemsBelowMinSupport();
-            //printPatterns();
-            printToFile();
+            addToFreqList();
+            //printToFile();
             kVal++;
         }
-
+        printToFile();
         printer.close();
 
 
