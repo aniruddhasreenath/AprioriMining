@@ -115,8 +115,8 @@ public class Apriori {
     }
 
     public void printToFile() throws IOException{
-        //sort in the correct order before printing
 
+        //sort in the correct order before printing
         setupFormat();
         for (int i = 0; i < items.size(); i ++){
 
@@ -146,10 +146,7 @@ public class Apriori {
         Arrays.sort(sortpats);
         ArrayList<Item> sortedListOfPatterns = new ArrayList<Item>(Arrays.asList(sortpats));
         frequentItemsList = sortedListOfPatterns;
-
         items = frequentItemsList;
-        //removeDuplicatesInCandidateList();
-
     }
 
     public void addToFreqList(){
@@ -158,7 +155,6 @@ public class Apriori {
             frequentItemsList.add(items.get(i));
         }
     }
-
 
     public void mine() throws IOException{
 
@@ -184,8 +180,6 @@ public class Apriori {
 
 
     }
-
-
 
     public void createFirstList(){
 
@@ -229,7 +223,6 @@ public class Apriori {
                         //clear wordscombo
                         wordCombo.remove(1);
                     }
-
                 }
                 wordCombo.clear();
             }
@@ -254,7 +247,6 @@ public class Apriori {
                     boolean comp = false;
                     for(int m = 0; m < k-1; m ++){
                         if(patternToMatch.get(m).equals(items.get(j).pattern[m])){
-                            //System.out.println("Matching: " + patternToMatch.get(m) + "with: " + items.get(j).pattern[m]);
                             comp = true;
                         }
                         else{
@@ -267,13 +259,8 @@ public class Apriori {
                         //add all the values to the new candidate
                         for (int n = 0; n < k; n ++){
                                 newCandidate.add(items.get(i).pattern[n]);
-                           // System.out.print(" " + items.get(i).pattern[n]);
-
                         }
                         newCandidate.add(items.get(j).pattern[k-1]);
-                        //System.out.print(" "+newCandidate.get(newCandidate.size() -1));
-
-                        //System.out.println();
                         //convert pattern into an array
                         String[] arr = new String[newCandidate.size()];
                         arr = newCandidate.toArray(arr);
@@ -281,8 +268,6 @@ public class Apriori {
                         //add this array to the new item and set count to 0
                         Item pattern = new Item(arr, 0);
                         newPat.add(pattern);
-
-                       // System.out.println(newCandidate.size());
 
                         //clear wordscombo
                         newCandidate.clear();
@@ -301,9 +286,10 @@ public class Apriori {
 
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).count < min_sup){
-                    //System.out.println("Removed: " + items.get(i).pattern[0] + " with count: " + items.get(i).count);
+                    //INSTEAD OF REMOVING WE JUST DONT ADD IT TO THE NEW LIST
                 }
                 else{
+                    //All these are above the min support so add it to the new list
                     tmp.add(items.get(i));
                 }
             }
@@ -312,7 +298,6 @@ public class Apriori {
     }
 
     public void calculateFrequent() throws IOException{
-        //System.out.println("Calculating the frequency of pattern at value: " );
 
         boolean match = false;
         //frequent candidates list
@@ -348,21 +333,9 @@ public class Apriori {
                     }
 
                     // if the pattern was found after the comparison of the entire patter then increment the count
-                   // System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
                     if(match){
-                        if (elementsToMatch.length > 1){
-                            for (int v = 0; v < elementsToMatch.length; v++){
-                                //System.out.print(" Data line: " + data + " matching ITEM : " + elementsToMatch[v] );
-                            }
-                           // System.out.println();
-                        }
-                       // System.out.println("==================================================");
-
                         items.get(i).count++;
                     }
-
-
-
             }
         }
 

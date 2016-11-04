@@ -17,30 +17,28 @@ public class Maximum {
 
     public String patternFileName;
 
-    //public int min_sup;
-
-
-
     public Maximum(String name)throws  IOException{
+
         frequentPatterns = new ArrayList<Item>();
         maxPatterns = new ArrayList<Item>();
         printer1 = new BufferedWriter(new FileWriter(generateMaxFileName(name)));
         printer2 = new BufferedWriter(new FileWriter(generateMinFileName(name)));
         closedPatterns = new ArrayList<Item>();
-        //topicFileName = topic;
-        //min_sup = 0;
         patternFileName = name;
+
+        //main methods being called here
         readFile(name);
         findMaxPatterns();
         findCLosedPatterns();
         printValuesMax();
         printValesClo();
-        //printValues();
+
         printer1.close();
         printer2.close();
     }
 
     public String generateMaxFileName(String f){
+        //generate the file names
         if(f.contains("0")){
             return "max-0.txt";
         }
@@ -61,6 +59,7 @@ public class Maximum {
     }
 
     public String generateMinFileName(String f){
+        //generate the file names
         if(f.contains("0")){
             return "closed-0.txt";
         }
@@ -90,7 +89,6 @@ public class Maximum {
             while(line != null){
 
                 tmp = line.split("\\s");
-                //min_sup = Integer.parseInt(tmp[0]);
                 ArrayList<String> pattern = new ArrayList<String>();
 
                 //remove the support at the start for the maximum pattern
@@ -151,13 +149,17 @@ public class Maximum {
             //select a pattern
             String[] pat = frequentPatterns.get(i).pattern;
 
+            //run through the rest of the patterns
            for(int j = i +1; j < frequentPatterns.size(); j++){
                String[] patOther = frequentPatterns.get(j).pattern;
 
+                    //check for a superset of this pattern
                    if(isSubset(pat,patOther)){
                        foundSuperSet = true;
                    }
                    else{
+
+                       //if it is not found then add it to the list
                        foundSuperSet = false;
                        maxPatterns.add(frequentPatterns.get(i));
                    }
@@ -171,6 +173,7 @@ public class Maximum {
     public void findCLosedPatterns()throws IOException{
 
         boolean foundSuperSet = false;
+
         //run through pattern array
         for(int i = 0; i < frequentPatterns.size(); i++){
             //select a pattern
@@ -179,8 +182,10 @@ public class Maximum {
             for(int j = i +1; j < frequentPatterns.size(); j++){
                 String[] patOther = frequentPatterns.get(j).pattern;
 
-                if (frequentPatterns.get(i).count == frequentPatterns.get(j).count) {
-                    if(isSubset(pat,patOther)){
+                //check for a superset of this pattern
+                if (isSubset(pat,patOther)) {
+                    //check if the counts are the same
+                    if(frequentPatterns.get(i).count == frequentPatterns.get(j).count){
                         foundSuperSet = true;
                     }
                     else{
@@ -188,8 +193,6 @@ public class Maximum {
                         closedPatterns.add(frequentPatterns.get(i));
                     }
                 }
-
-
 
             }
             removeDuplicatesInCandidateList();
@@ -203,6 +206,7 @@ public class Maximum {
         int lenA = a.length;
         int lenB = b.length;
 
+        //if the length of a is less than b then a is not a subet of b return false
         if (lenA >= lenB){
             return false;
         }
@@ -227,6 +231,7 @@ public class Maximum {
 
     public void removeDuplicatesInCandidateList(){
 
+        //remove duplicates for max patterns
         for (int i = 0; i < maxPatterns.size(); i++){
 
             for (int j = i+1; j < maxPatterns.size(); j++){
@@ -236,9 +241,15 @@ public class Maximum {
             }
         }
 
+        //remove duplicates for closed patterns
+        for (int i = 0; i < closedPatterns.size(); i++){
+
+            for (int j = i+1; j < closedPatterns.size(); j++){
+                if(Arrays.equals(closedPatterns.get(i).pattern, closedPatterns.get(j).pattern)){
+                    closedPatterns.remove(j);
+                }
+            }
+        }
+
     }
-
-
-
-
 }

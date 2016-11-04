@@ -38,6 +38,7 @@ public class Reorganise {
     }
 
     public static void readAssignments() throws IOException{
+
         BufferedReader reader = new BufferedReader(new FileReader("src/word-assignments.dat"));
         try {
             String line = reader.readLine();
@@ -66,33 +67,28 @@ public class Reorganise {
     public static void organise(String wrd) throws IOException{
 
         String[] tmp;
-           // System.out.println("Word being classified: " + wrd);
+           //this classifies the words into the correct topics based on the classification by the LDA
             tmp = wrd.split(":");
             if(tmp[1].equals("00")){
                 topic_one.add(tmp[0]);
-                //System.out.print(" Inserted this word into first topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("01")){
                 topic_two.add(tmp[0]);
-                //System.out.print(" Inserted this word into second topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("02")){
                 topic_three.add(tmp[0]);
-                //System.out.print(" Inserted this word into third  topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("03")){
                 topic_four.add(tmp[0]);
-                //System.out.print(" Inserted this word into 4th topic " + wrd + " actally inserted word: " + tmp[0]);
             }
             else if(tmp[1].equals("04")){
                 topic_five.add(tmp[0]);
-                //System.out.print(" Inserted this word into 5th topic " + wrd + " actally inserted word: " + tmp[0]);
-
             }
 
     }
 
     public static void resetLists(){
+
         topic_one.clear();
         topic_two.clear();
         topic_three.clear();
@@ -166,6 +162,7 @@ public class Reorganise {
     }
 
     public static void closeFiles() throws IOException{
+
         file1.close();
         file2.close();
         file3.close();

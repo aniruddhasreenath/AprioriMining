@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Dictionary {
 
     public static ArrayList<String> titles = new ArrayList<String>();
+    //this stores the content in the vocab file
     public static ArrayList<String> words  = new ArrayList<String>();
 
     public static void readFile() throws IOException{
@@ -68,5 +69,6 @@ public class Dictionary {
 
         }
     }
+
 
 }

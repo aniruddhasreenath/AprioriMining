@@ -13,14 +13,10 @@ public class Item implements Comparable<Item> {
         pattern = pat;
         count = c;
     }
+
     public int compareTo(Item item) {
-
+        //return the difference between the counts of the two items
         int otherCount = item.count;
-
-        //ascending order
-        //return this.count - otherCount;
-
-        //descending order
         return otherCount - this.count;
 
     }

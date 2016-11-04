@@ -1,8 +1,10 @@
 import com.sun.org.apache.regexp.internal.RE;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by sreenath on 27/10/2016.
@@ -11,19 +13,23 @@ public class Driver {
 
     public static void main(String[] args) throws IOException{
         //step 2
-        //preprocess();
+        preprocess();
 
         //step 3
-        //Reorganise.setUpReorganiser();
+        Reorganise.setUpReorganiser();
 
         //step 4
-        //runApriori();
+        runApriori();
 
         //step 5
-        //findMaxAndClosedPatterns();
+        findMaxAndClosedPatterns();
 
         //step 6
-        Purity test = new Purity("pattern-0.txt");
+        //Purity test = new Purity("pattern-0.txt");
+
+
+        //(Extra Step) RUN PRE-PROCESSING BEFORE RUNNING THIS
+        generatePhraseFiles();
 
     }
 
@@ -38,19 +44,19 @@ public class Driver {
 
     public static void runApriori() throws IOException{
         System.out.println("RUNNING MINING ALGORITHM ON FILE topic-0");
-        Apriori ap1 = new Apriori("src/topic-0.txt",0.01);
+        Apriori ap1 = new Apriori("topic-0.txt",0.01);
 
         System.out.println("RUNNING MINING ALGORITHM ON FILE topic-1");
-        Apriori ap2 = new Apriori("src/topic-1.txt",0.01);
+        Apriori ap2 = new Apriori("topic-1.txt",0.01);
 
         System.out.println("RUNNING MINING ALGORITHM ON FILE topic-2");
-        Apriori ap3 = new Apriori("src/topic-2.txt",0.01);
+        Apriori ap3 = new Apriori("topic-2.txt",0.01);
 
         System.out.println("RUNNING MINING ALGORITHM ON FILE topic-3");
-        Apriori ap4 = new Apriori("src/topic-3.txt",0.01);
+        Apriori ap4 = new Apriori("topic-3.txt",0.01);
 
         System.out.println("RUNNING MINING ALGORITHM ON FILE topic-4");
-        Apriori ap5 = new Apriori("src/topic-4.txt",0.02);
+        Apriori ap5 = new Apriori("topic-4.txt",0.01);
     }
 
     public static void findMaxAndClosedPatterns() throws IOException{
@@ -68,6 +74,24 @@ public class Driver {
 
         System.out.println("RUNNING MINING ALGORITHM ON FILE pattern-4");
         Maximum mc5 = new Maximum("pattern-4.txt");
+
+    }
+
+    public static void generatePhraseFiles()throws IOException{
+        System.out.println("GENERATING PHRASES ON ALL PATTERN FILES");
+        for(int i = 0; i <= 4; i++){
+            Phrases ph1 = new Phrases("pattern-"+Integer.toString(i)+".txt");
+        }
+
+        System.out.println("GENERATING PHRASES ON ALL MAX FILES");
+        for(int i = 0; i <= 4; i++){
+            Phrases ph2 = new Phrases("max-"+Integer.toString(i)+".txt");
+        }
+
+        System.out.println("GENERATING PHRASES ON ALL CLOSED FILES");
+        for(int i = 0; i <= 4; i++){
+            Phrases ph3 = new Phrases("closed-"+Integer.toString(i)+".txt");
+        }
 
     }
 
