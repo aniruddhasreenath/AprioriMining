@@ -25,8 +25,7 @@ public class Driver {
         findMaxAndClosedPatterns();
 
         //step 6
-        //Purity test = new Purity("pattern-0.txt");
-
+        generatePurity();
 
         //(Extra Step) RUN PRE-PROCESSING BEFORE RUNNING THIS
         generatePhraseFiles();
@@ -92,6 +91,19 @@ public class Driver {
         for(int i = 0; i <= 4; i++){
             Phrases ph3 = new Phrases("closed-"+Integer.toString(i)+".txt");
         }
+        for(int i = 0; i <= 4; i++){
+            Phrases ph4 = new Phrases("purity-"+Integer.toString(i)+".txt");
+        }
+
+    }
+
+    public static void generatePurity() throws IOException{
+
+        Purity pur1 = new Purity("pattern-0.txt", 0, 9013);
+        Purity pur2 = new Purity("pattern-1.txt", 0, 9785);
+        Purity pur3 = new Purity("pattern-2.txt", 0, 8378);
+        Purity pur4 = new Purity("pattern-3.txt", 0, 9130);
+        Purity pur5 = new Purity("pattern-4.txt", 0, 9440);
 
     }
 
